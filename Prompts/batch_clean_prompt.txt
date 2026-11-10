@@ -1,0 +1,41 @@
+Batch-clean a folder of raw Tamil transcripts using transcript_prompt.txt.
+
+Input folder:  BG-TEXT
+Output folder: BG-TEXT-cleaned
+Rules file:    D:\Temp\youtube_transcript\transcript_prompt.txt
+
+Do the following:
+
+1. List every *.txt file in BG-TEXT.
+
+2. For each file, check whether a file with the same name already exists in
+   {OUTPUT_FOLDER}. If it does, skip that file (this makes the batch resumable —
+   re-running this prompt after a partial run only processes what's left).
+   Create {OUTPUT_FOLDER} first if it doesn't exist yet.
+
+3. For each remaining file, dispatch a general-purpose agent (no prior context
+   needed) with a self-contained prompt instructing it to:
+   - Read D:\Temp\youtube_transcript\transcript_prompt.txt for the full rule set.
+   - Read the one raw input file.
+   - Apply every rule in transcript_prompt.txt to that file's content itself (it
+     is the editor described in the prompt — perform the actual cleaning, don't
+     just describe what to do), including the prompt's own silent internal
+     verification step before finalizing.
+   - Write the cleaned result to {OUTPUT_FOLDER} under the same filename via the
+     Write tool. Output must contain only the cleaned transcript with bracketed
+     subtitles — no commentary, summary, explanation of edits, or translation.
+   - Report back input/output character counts and whether any [தெளிவில்லை]
+     markers were added.
+
+4. Dispatch these agents in small parallel batches (3-5 concurrent) rather than
+   one at a time or all at once, since each file is independent.
+
+5. After all files finish, report a summary:
+   - Total files processed, total skipped (already existed).
+   - Any file where output length dropped by more than ~40% versus input (a
+     likely sign of over-summarization rather than repetition removal — flag
+     for manual re-check).
+   - Any file containing [தெளிவில்லை] markers (flag for manual review).
+
+Do not process files outside BG-TEXT, and do not modify transcript_prompt.txt
+itself.

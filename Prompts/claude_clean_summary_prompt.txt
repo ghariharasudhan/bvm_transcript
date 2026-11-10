@@ -1,0 +1,36 @@
+ Process the **pending 10 transcript files** in the BG_Transcript directory, in alphabetical order.
+ If a file has _cleaned and _summary, then the file is considered processed
+
+Identify original `.txt` files, excluding `_cleaned.txt` and `_summary.txt` files.
+
+A transcript is considered completed only when both its cleaned and summary output files exist and have been verified.
+
+For each selected transcript, execute these tasks strictly in sequence:
+
+**Task 1 — Transcript Cleaning**
+
+Read `claude.md` and follow its instructions to clean the transcript.
+
+Save as `<filename>_cleaned.txt` using UTF-8 encoding in the same folder.
+
+Verify the output before proceeding.
+
+**Task 2 — Summarization**
+
+Only after Task 1 is completed and verified, read `sumary.md` and follow its instructions to summarize the cleaned transcript.
+
+Save as `<filename>_summary.txt` using UTF-8 encoding in the same folder.
+
+Verify the output before proceeding to the next transcript.
+
+**Execution Rules**
+
+- Process a maximum of 10 transcripts in this run.
+- Do not execute tasks or process files in parallel.
+- Complete both tasks for one transcript before starting the next.
+- Skip transcripts that already have both verified outputs.
+- If only the cleaned file exists and is valid, resume from summarization.
+- Do not overwrite valid completed outputs.
+- Do not modify original transcripts or instruction files.
+- If a task fails, stop and report the error.
+- Report processed, skipped, and remaining transcript counts at the end.
